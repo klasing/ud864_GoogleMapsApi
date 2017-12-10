@@ -24,8 +24,20 @@
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 52.0053709, lng: 5.2004616},
-          zoom: 18
+          center: {lat: 40.7413549, lng: -73.9980244},
+          zoom: 13
+        });
+        var tribecca = {lat: 40.719526, lng: -74.0089934}
+        var marker = new google.maps.Marker({
+          position: tribecca,
+          map: map,
+          title: 'First Marker!'
+        });
+        var infoWindow = new google.maps.InfoWindow({
+          content: 'Do you ever feel like an InfoWindow, floating through the wind,' + ' ready to start again?'
+        });
+        marker.addListener('click', function() {
+          infoWindow.open(map, marker);
         });
       }
     </script>
@@ -36,4 +48,6 @@
 <!--
 center: {lat: -34.397, lng: 150.644},
 zoom: 8
+Wickenburgh
+center: {lat: 52.0053709, lng: 5.2004616},
 -->
