@@ -127,7 +127,7 @@
 
         // create a "highlighted location"  marker color for when the user
         // mouses over the marker
-        var highLightedIcon = makeMarkerIcon('FFFF24');
+        var highlightedIcon = makeMarkerIcon('FFFF24');
 
         var bounds = new google.maps.LatLngBounds();
         // the following group uses the location aarray to create an array of markers on initialize
@@ -147,7 +147,7 @@
           // push the marker to array of markers
           markers.push(marker);
           // extend the boundaries of the map for each marker
-          bounds.extend(marker.position);
+          //bounds.extend(marker.position);
           // create an onclick event to open an infowindow at each marker
           marker.addListener('click', function() {
             populateInfoWindow(this, largeInfoWindow);
