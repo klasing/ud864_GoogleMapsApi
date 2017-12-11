@@ -49,10 +49,52 @@
       var markers = [];
 
       function initMap() {
+        var styles = [
+          {
+            featureType: 'water',
+            stylers: [
+              { color: '#19a0d8' }
+            ]
+          },{
+            featureType: 'administrative',
+            elementType: 'labels.text.stroke',
+            stylers: [
+              { color: '#ffffff' },
+              { weight: 6 }
+            ]
+          },{
+            featureType: 'administrative',
+            elementType: 'labels.text.fill',
+            stylers: [
+              { color: '#e85113' }
+            ]
+          },{
+            featureType: 'road.highway',
+            elementType: 'geometry.stroke',
+            stylers: [
+              { color: '#efe9e4'},
+              { lightness: -40}
+            ]
+          },{
+            featureType: 'transit.station',
+            stylers: [
+              { weight: 9},
+              { hue: '#e85113'}
+            ]
+          },{
+            featureType: 'road.highway',
+            elementType: 'labels.icon',
+            stylers: [
+              { visibility: 'off'}
+            ]
+          }
+        ];
         // constructor creates a new map - only center and zoom are required
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 40.7413549, lng: -73.9980244},
-          zoom: 13
+          zoom: 13,
+          styles: styles,
+          mapTypeControl: false
         });
 
         // var tribecca = {lat: 40.719526, lng: -74.0089934}
@@ -78,6 +120,15 @@
           {title: 'Chinatown Homey Space', location: {lat: 40.7180628, lng: -73.9961237}}
         ];
         var largeInfoWindow = new google.maps.InfoWindow();
+
+        // style the markers a bit
+        // this will be the listing marker icon
+        var defaultIcon = makeMarkerIcon('0091ff');
+
+        // create a "highlighted location"  marker color for when the user
+        // mouses over the marker
+        var highLightedIcon = makeMarkerIcon('FFFF24');
+
         var bounds = new google.maps.LatLngBounds();
         // the following group uses the location aarray to create an array of markers on initialize
         for (var i = 0; i < locations.length; i++) {
@@ -89,6 +140,7 @@
             //map: map,
             position: position,
             title: title,
+            icon: defaultIcon,
             animation: google.maps.Animation.DROP,
             id: i
           });
@@ -99,6 +151,14 @@
           // create an onclick event to open an infowindow at each marker
           marker.addListener('click', function() {
             populateInfoWindow(this, largeInfoWindow);
+          });
+          // two event listeners - one for mouseover, one for mouseout,
+          // to change the colors back and forth
+          marker.addListener('mouseover', function() {
+            this.setIcon(highlightedIcon);
+          });
+          marker.addListener('mouseout', function() {
+            this.setIcon(defaultIcon);
           });
         }
         //map.fitBounds(bounds);
@@ -138,6 +198,22 @@
           for (var i = 0; i < markers.length; i++) {
             markers[i].setMap(null);
           }
+        }
+
+        // this function takes in a color, and then creates a new marker
+        // icon of that color
+        // the icon will be 21 px wide by 34 px high, have an origin
+        // of 0, 0 and be anchored at 10, 34
+        function makeMarkerIcon(markerColor) {
+
+            var markerImage = new google.maps.MarkerImage(
+              'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor + '|40|_|%E2%80%A2',
+              new google.maps.Size(21, 34),
+              new google.maps.Point(0, 0),
+              new google.maps.Point(10, 34),
+              new google.maps.Size(21,34));
+            return markerImage;
+
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC325TJBtIsNKdZ6Q9GELYManLO9Z7RtzE&callback=initMap"
